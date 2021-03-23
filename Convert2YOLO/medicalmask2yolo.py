@@ -71,8 +71,12 @@ class KaggleMedicalMaskReader():
                 cv2.waitKey(1)
 
 def main():
-    images_dir = './MedicalMaskDataset-kaggle/medical-masks-dataset/images'
-    labels_dir = './MedicalMaskDataset-kaggle/medical-masks-dataset/labels'
+    parser = argparse.ArgumentParser(description='Kaggle Medical Mask dataset annotation to YOLO')
+    parser.add_argument('--base-dir', default="./MedicalMaskDataset-kaggle/medical-masks-dataset/", help='Location of dataset directory')
+    opt = parser.parse_args()
+    
+    images_dir = os.path.join(opt.base_dir, 'images')
+    labels_dir = os.path.join(opt.base_dir, 'labels')
     
     reader = KaggleMedicalMaskReader(images_dir, labels_dir)
     reader.get_data_attributes()

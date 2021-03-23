@@ -2,6 +2,7 @@ from xml.etree import ElementTree
 import os
 import numpy as np
 import cv2
+import argparse
 
 from pathlib import Path
 
@@ -40,27 +41,23 @@ class KaggleMedicalMaskReader():
                 
                 with open(label_full_path, 'w') as f:
                     for object_tag in labels.findall("object"):
-                        cat_name = object_tag.find("name").text
+                        category_name = object_tag.find("name").text
 
-                        if (cat_name == 'mask'):
+                        if category_name == 'mask':
                             yolo_class = 1
-                            xmin = int(object_tag.find("bndbox/xmin").text)
-                            xmax = int(object_tag.find("bndbox/xmax").text)
-                            ymin = int(object_tag.find("bndbox/ymin").text)
-                            ymax = int(object_tag.find("bndbox/ymax").text)
-                            bbox = [xmin, ymin, xmax, ymax]
                             color = (0, 0, 255)
-                        elif cat_name == 'none':
+                        elif category_name == 'none':
                             yolo_class = 0
-                            xmin = int(object_tag.find("bndbox/xmin").text)
-                            xmax = int(object_tag.find("bndbox/xmax").text)
-                            ymin = int(object_tag.find("bndbox/ymin").text)
-                            ymax = int(object_tag.find("bndbox/ymax").text)
-                            bbox = [xmin, ymin, xmax, ymax]
                             color = (0, 255, 0)
                         else:
                             continue
                         
+                        xmin = int(object_tag.find("bndbox/xmin").text)
+                        xmax = int(object_tag.find("bndbox/xmax").text)
+                        ymin = int(object_tag.find("bndbox/ymin").text)
+                        ymax = int(object_tag.find("bndbox/ymax").text)
+                        bbox = [xmin, ymin, xmax, ymax]
+
                         cx = (xmin+xmax)/2/img_w
                         cy = (ymin+ymax)/2/img_h
                         w = (xmax-xmin)/img_w

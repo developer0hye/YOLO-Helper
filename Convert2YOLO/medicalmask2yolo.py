@@ -1,5 +1,4 @@
 from xml.etree import ElementTree
-from PIL import Image, ImageDraw, ImageFont
 import os
 import numpy as np
 import cv2
